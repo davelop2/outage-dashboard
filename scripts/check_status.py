@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Chequea el estado de cada herramienta contra su fuente oficial y:
-  1) Escribe data/status.json con el snapshot actual (lo lee el dashboard).
-  2) Compara contra el snapshot anterior y, si algo pasó a estar caído /
-     degradado, envía una tarjeta a Microsoft Teams (Workflows webhook).
+Checks each tool's status against its official source and:
+  1) Writes data/status.json with the current snapshot (read by the dashboard).
+  2) Compares it against the previous snapshot and, if anything moved to
+     degraded/down, sends a card to Microsoft Teams (Workflows webhook).
 
-Diseñado para correr cada N minutos vía GitHub Actions (ver
-.github/workflows/monitor.yml), pero funciona igual en un cron local.
+Designed to run every N minutes via GitHub Actions (see
+.github/workflows/monitor.yml), but works the same in a local cron job.
 """
 import json
 import os
@@ -23,7 +23,7 @@ STATUS_FILE = os.path.join(ROOT, "data", "status.json")
 TEAMS_WEBHOOK_URL = os.environ.get("TEAMS_WEBHOOK_URL", "").strip()
 TIMEOUT = 10
 
-# Estados normalizados que usa todo el panel, de mejor a peor
+# Normalized statuses used across the whole dashboard, best to worst
 OK, DEGRADED, DOWN, UNKNOWN, MANUAL = "operational", "degraded", "down", "unknown", "manual"
 
 
@@ -34,7 +34,7 @@ def http_get_json(url):
 
 
 def check_statuspage(service):
-    """Servicios sobre Atlassian Statuspage.io: Asana, Jira/Atlassian, Zoom, DocuSign, etc."""
+    """Services on Atlassian Statuspage.io: Asana, Jira/Atlassian, Zoom, DocuSign, etc."""
     try:
         data = http_get_json(service["api_url"])
         indicator = data.get("status", {}).get("indicator", "unknown")
@@ -47,71 +47,74 @@ def check_statuspage(service):
         }
         return mapping.get(indicator, UNKNOWN), description or indicator
     except Exception as e:
-        return UNKNOWN, f"No se pudo consultar el status page ({e})"
+        return UNKNOWN, f"Could not reach the status page ({e})"
 
 
 def check_statuspage_best_effort(service):
-    """Igual que statuspage, pero de un proveedor donde no confirmamos que el
-    endpoint público exista siempre — si falla, se marca como 'revisar manualmente'
-    en vez de mostrar un falso 'operational'."""
+    """Same as statuspage, but for a provider whose public endpoint we
+    haven't confirmed is always available — if it fails, it's marked
+    'review manually' instead of showing a false 'operational'."""
     status, desc = check_statuspage(service)
     if status == UNKNOWN:
-        return UNKNOWN, f"Endpoint no disponible o cambió. Revisar manualmente: {service['status_url']}"
+        return UNKNOWN, f"Endpoint unavailable or changed. Review manually: {service['status_url']}"
     return status, desc
 
 
 def check_salesforce_trust(service):
-    """API pública de Salesforce Trust (cubre también productos como Tableau vía /products/)."""
+    """Public Salesforce Trust API (also covers products like Tableau via /products/)."""
     try:
         data = http_get_json(service["api_url"])
-        # La API devuelve una lista de instancias con su status
+        # The API returns a list of instances with their status
         statuses = [row.get("status") for row in data if isinstance(row, dict)]
         if any(s == "MAJOR_INCIDENT" for s in statuses):
-            return DOWN, "Major incident reportado en Salesforce Trust"
+            return DOWN, "Major incident reported on Salesforce Trust"
         if any(s in ("MINOR_INCIDENT", "MAINTENANCE") for s in statuses):
-            return DEGRADED, "Incidente menor o mantenimiento en curso"
+            return DEGRADED, "Minor incident or maintenance in progress"
         if statuses:
             return OK, "Available"
-        return UNKNOWN, "Sin datos de instancias"
+        return UNKNOWN, "No instance data returned"
     except Exception as e:
-        return UNKNOWN, f"No se pudo consultar Salesforce Trust API ({e})"
+        return UNKNOWN, f"Could not reach the Salesforce Trust API ({e})"
 
 
 def check_manual(service):
-    return MANUAL, service.get("note", "Requiere revisión manual / no hay API pública.")
+    return MANUAL, service.get("note", "Requires manual review / no public API.")
 
 
 def check_ms_status_post(service):
-    """Endpoint público de status.cloud.microsoft (sin login, sin CORS porque
-    esto corre server-side). Ojo: 'mac' solo indica si el admin center de M365
-    está accesible, no el estado real de Exchange/Teams/SharePoint por tenant."""
+    """Public endpoint at status.cloud.microsoft (no login, no CORS issue since
+    this runs server-side). Note: 'mac' only reports whether the M365 admin
+    center itself is reachable, not the real per-tenant status of
+    Exchange/Teams/SharePoint."""
     try:
         data = http_get_json(service["api_url"])
         status_text = (data.get("Status") or "").strip()
         message = (data.get("Message") or "")
         if status_text.lower() == "available":
-            return OK, "Admin center de M365 disponible (no refleja incidentes por servicio/tenant)"
-        return DEGRADED, f"Estado reportado: {status_text or 'desconocido'} — {message[:180]}"
+            return OK, "M365 admin center available (does not reflect per-service/tenant incidents)"
+        return DEGRADED, f"Reported status: {status_text or 'unknown'} — {message[:180]}"
     except Exception as e:
-        return UNKNOWN, f"No se pudo consultar status.cloud.microsoft ({e})"
+        return UNKNOWN, f"Could not reach status.cloud.microsoft ({e})"
 
 
 CHECKERS = {
     "statuspage": check_statuspage,
     "statuspage_best_effort": check_statuspage_best_effort,
     "salesforce_trust": check_salesforce_trust,
-    "salesforce_trust_product": check_salesforce_trust,  # simplificado: mismo endpoint base
+    "salesforce_trust_product": check_salesforce_trust,  # simplified: same base endpoint
     "ms_status_post": check_ms_status_post,
     "manual": check_manual,
 }
+# Note: check_statuspage_best_effort stays available for the day you add a
+# service whose public endpoint isn't 100% confirmed (see README).
 
 
 # ---------------------------------------------------------------------------
-# Microsoft 365 — estado real por servicio, vía Microsoft Graph
-# Solo se activa si existen las 3 variables de entorno MS_TENANT_ID,
-# MS_CLIENT_ID, MS_CLIENT_SECRET (secretos de una app de solo lectura
-# registrada en Entra ID — ver README, sección "Microsoft 365 completo").
-# Si no están, el panel sigue mostrando la señal parcial de "mac".
+# Microsoft 365 — real per-service status, via Microsoft Graph
+# Only activates if the 3 environment variables MS_TENANT_ID, MS_CLIENT_ID,
+# MS_CLIENT_SECRET exist (secrets for a read-only app registered in Entra ID
+# — see README, "Full Microsoft 365 integration" section).
+# If they're not set, the panel keeps showing the partial "mac" signal.
 # ---------------------------------------------------------------------------
 
 GRAPH_STATUS_MAP = {
@@ -147,8 +150,8 @@ def get_graph_token():
 
 
 def check_ms_graph_all_services():
-    """Devuelve un dict {id: {name, status, detail}} — uno por cada servicio
-    de M365 al que esté suscrito el tenant (Exchange, Teams, SharePoint...)."""
+    """Returns a dict {id: {name, status, detail}} — one entry per M365
+    service the tenant is subscribed to (Exchange, Teams, SharePoint...)."""
     token = get_graph_token()
     req = urllib.request.Request(
         "https://graph.microsoft.com/v1.0/admin/serviceAnnouncement/healthOverviews",
@@ -159,14 +162,14 @@ def check_ms_graph_all_services():
 
     results = {}
     for item in data.get("value", []):
-        service_name = item.get("service", "Servicio desconocido")
+        service_name = item.get("service", "Unknown service")
         raw_status = (item.get("status") or "").lower()
         status = GRAPH_STATUS_MAP.get(raw_status, UNKNOWN)
         service_id = "m365_" + service_name.lower().replace(" ", "_").replace("/", "_")
         results[service_id] = {
             "name": f"Microsoft 365 — {service_name}",
             "status": status,
-            "detail": f"Estado Graph: {item.get('status', 'unknown')}",
+            "detail": f"Graph status: {item.get('status', 'unknown')}",
             "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
             "checked_at": datetime.now(timezone.utc).isoformat(),
         }
@@ -175,8 +178,6 @@ def check_ms_graph_all_services():
 
 def ms_graph_credentials_available():
     return all(os.environ.get(k) for k in ("MS_TENANT_ID", "MS_CLIENT_ID", "MS_CLIENT_SECRET"))
-# Nota: check_statuspage_best_effort queda disponible para el día que agreguen
-# un servicio cuyo endpoint público no esté 100% confirmado (ver README).
 
 
 def load_previous():
@@ -190,20 +191,20 @@ def load_previous():
 
 
 def send_teams_alert(changed):
-    """Envía una MessageCard a un webhook de Teams Workflows.
-    IMPORTANTE: desde mayo 2026 los webhooks 'Incoming Webhook' clásicos de
-    Office 365 Connectors ya no funcionan. Hay que usar un webhook creado con
-    la app 'Workflows' en Teams (plantilla: 'Post to a channel when a webhook
-    request is received'), que sigue aceptando este mismo formato MessageCard.
+    """Sends a MessageCard to a Teams Workflows webhook.
+    IMPORTANT: since May 2026 the classic 'Incoming Webhook' connectors from
+    Office 365 Connectors no longer work. You need a webhook created with the
+    'Workflows' app in Teams (template: 'Send webhook alerts to a channel'),
+    which still accepts this same MessageCard format.
     """
     if not TEAMS_WEBHOOK_URL:
-        print("TEAMS_WEBHOOK_URL no configurado — se omite el envío a Teams.")
+        print("TEAMS_WEBHOOK_URL not set — skipping the Teams notification.")
         return
 
     facts = [{"name": c["name"], "value": f"{c['from']} → {c['to']}"} for c in changed]
     worst = "down" if any(c["to"] == DOWN for c in changed) else "degraded"
     color = "B3311F" if worst == "down" else "C77D18"
-    title = "🔴 Outage detectado" if worst == "down" else "🟡 Degradación detectada"
+    title = "🔴 Outage detected" if worst == "down" else "🟡 Degradation detected"
 
     card = {
         "@type": "MessageCard",
@@ -226,9 +227,9 @@ def send_teams_alert(changed):
     )
     try:
         with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
-            print(f"Alerta enviada a Teams (HTTP {resp.status}).")
+            print(f"Alert sent to Teams (HTTP {resp.status}).")
     except urllib.error.HTTPError as e:
-        print(f"Error enviando a Teams: {e.code} {e.read()[:300]}")
+        print(f"Error sending to Teams: {e.code} {e.read()[:300]}")
 
 
 def main():
@@ -242,8 +243,8 @@ def main():
     changed = []
 
     for service in config:
-        # Microsoft 365: si hay credenciales de Graph, reemplazamos el chequeo
-        # genérico por el detalle real de cada servicio del tenant.
+        # Microsoft 365: if Graph credentials exist, swap the generic check
+        # for the real per-service detail for the tenant.
         if service["id"] == "microsoft365" and ms_graph_credentials_available():
             try:
                 graph_results = check_ms_graph_all_services()
@@ -254,8 +255,8 @@ def main():
                         changed.append({"name": row["name"], "from": prev_status, "to": row["status"]})
                 continue
             except Exception as e:
-                print(f"Graph falló, uso el respaldo público de M365 ({e})")
-                # sigue al chequeo normal (endpoint 'mac') como respaldo
+                print(f"Graph call failed, falling back to the public M365 signal ({e})")
+                # falls through to the normal check ('mac' endpoint) as a fallback
 
         checker = CHECKERS.get(service["type"], check_manual)
         status, detail = checker(service)
@@ -268,7 +269,7 @@ def main():
         }
 
         prev_status = previous.get(service["id"], {}).get("status")
-        # Solo alertamos cuando empeora hacia degraded/down (evita ruido en 'manual'/'unknown')
+        # Only alert when it worsens to degraded/down (avoids noise from 'manual'/'unknown')
         if prev_status and prev_status != status and status in (DEGRADED, DOWN):
             changed.append({"name": service["name"], "from": prev_status, "to": status})
 
@@ -281,7 +282,7 @@ def main():
     if changed:
         send_teams_alert(changed)
     else:
-        print("Sin cambios que alertar.")
+        print("No changes to alert on.")
 
     print(json.dumps({k: v["status"] for k, v in results.items()}, indent=2, ensure_ascii=False))
 
