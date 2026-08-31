@@ -295,6 +295,12 @@ def main():
         if prev_status and prev_status != status and status in (DEGRADED, DOWN):
             changed.append({"name": service["name"], "from": prev_status, "to": status})
 
+    # Manual test trigger (workflow_dispatch checkbox) — sends a real Teams
+    # alert through the exact same code path as a real incident, without
+    # touching the actual status data.
+    if os.environ.get("TEST_ALERT", "").lower() in ("true", "1"):
+        changed.append({"name": "Test alert (manually triggered)", "from": "operational", "to": "down"})
+
     snapshot = {"generated_at": now, "services": results}
 
     os.makedirs(os.path.dirname(STATUS_FILE), exist_ok=True)
