@@ -28,7 +28,10 @@ OK, DEGRADED, DOWN, UNKNOWN, MANUAL = "operational", "degraded", "down", "unknow
 
 
 def http_get_json(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "outage-dashboard/1.0"})
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "Mozilla/5.0 (compatible; outage-dashboard/1.0; +https://github.com)",
+        "Accept": "application/json",
+    })
     with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
@@ -81,6 +84,24 @@ def check_manual(service):
     return MANUAL, service.get("note", "Requires manual review / no public API.")
 
 
+def check_html_scrape(service):
+    """For status pages that don't expose a JSON API and just render the
+    status text directly in the HTML (e.g. Call Tracking Metrics, on Rootly
+    rather than Statuspage.io). Looks for an 'operational' banner in the
+    page text — approximate by nature, so treat it as best-effort."""
+    try:
+        req = urllib.request.Request(service["status_url"], headers={
+            "User-Agent": "Mozilla/5.0 (compatible; outage-dashboard/1.0; +https://github.com)",
+        })
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+            html = resp.read().decode("utf-8", errors="ignore").lower()
+        if "operational" in html:
+            return OK, "Status page reports all systems operational"
+        return DEGRADED, f"No 'operational' banner found on the page — check manually: {service['status_url']}"
+    except Exception as e:
+        return UNKNOWN, f"Could not reach the status page ({e})"
+
+
 def check_ms_status_post(service):
     """Public endpoint at status.cloud.microsoft (no login, no CORS issue since
     this runs server-side). Note: 'mac' only reports whether the M365 admin
@@ -103,6 +124,7 @@ CHECKERS = {
     "salesforce_trust": check_salesforce_trust,
     "salesforce_trust_product": check_salesforce_trust,  # simplified: same base endpoint
     "ms_status_post": check_ms_status_post,
+    "html_scrape": check_html_scrape,
     "manual": check_manual,
 }
 # Note: check_statuspage_best_effort stays available for the day you add a
