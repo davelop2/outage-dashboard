@@ -23,20 +23,6 @@
       "api_url": "https://status.atlassian.com/api/v2/summary.json"
     },
     {
-      "id": "aws",
-      "name": "AWS",
-      "type": "manual",
-      "status_url": "https://health.aws.amazon.com/health/status",
-      "note": "AWS doesn't have a single public JSON with CORS support; the Service Health Dashboard is split by region/service via RSS. Tell me which AWS services (EC2, S3, RDS...) and regions you use, and I can generate the specific RSS feeds."
-    },
-    {
-      "id": "calltrackingmetrics",
-      "name": "Call Tracking Metrics",
-      "type": "html_scrape",
-      "status_url": "https://status.calltrackingmetrics.com",
-      "note": "This provider doesn't expose a JSON API like the others (their status page renders the text directly in the HTML, on a different platform). The check looks for an 'operational' banner in the page text — less precise than a real API, so treat it as a best-effort signal."
-    },
-    {
       "id": "docusign",
       "name": "DocuSign",
       "type": "statuspage",
