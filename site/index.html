@@ -31,7 +31,7 @@
     font-family:"IBM Plex Sans",system-ui,sans-serif;
     -webkit-font-smoothing:antialiased;
   }
-  .wrap{max-width:840px;margin:0 auto;padding:40px 24px 80px;}
+  .wrap{max-width:840px;margin:0 auto;padding:40px 24px 80px;box-sizing:border-box;}
 
   .brand{display:flex;align-items:flex-start;gap:16px;margin-bottom:4px;}
   .brand img{height:38px;width:auto;display:block;margin-top:2px;}
@@ -52,15 +52,16 @@
 
   .board{background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden;}
   .row{
-    display:grid;
-    grid-template-columns:20px 1fr auto;
+    display:flex;
+    flex-wrap:nowrap;
+    align-items:flex-start;
     gap:16px;
-    align-items:start;
     padding:16px 20px;
     border-bottom:1px solid var(--line);
   }
   .row:last-child{border-bottom:none;}
-  .row .dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+  .row .dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:0 0 9px;}
+  .row .content{flex:1 1 auto;min-width:0;}
   .dot.ok{background:var(--ok);}
   .dot.degraded{background:var(--degraded);}
   .dot.down{background:var(--down);}
@@ -68,10 +69,10 @@
   .dot.unknown{background:#9AA3AF;}
 
   .name{font-weight:500;font-size:0.98rem;}
-  .detail{color:var(--muted);font-size:0.85rem;margin-top:3px;line-height:1.4;}
+  .detail{color:var(--muted);font-size:0.85rem;margin-top:3px;line-height:1.4;overflow-wrap:break-word;}
   .row a{color:var(--indigo);text-decoration:none;font-size:0.82rem;font-weight:500;}
   .row a:hover{text-decoration:underline;}
-  .checked{font-family:"IBM Plex Mono",monospace;font-size:0.72rem;color:#9AA3AF;text-align:right;white-space:nowrap;}
+  .checked{flex:0 0 auto;font-family:"IBM Plex Mono",monospace;font-size:0.72rem;color:#9AA3AF;text-align:right;white-space:nowrap;}
 
   .section-label{padding:10px 20px;font-size:0.78rem;color:var(--muted);background:#F7F8FA;border-bottom:1px solid var(--line);}
 
@@ -173,7 +174,7 @@ function render(data){
     const meta = STATUS_META[s.status] || STATUS_META.unknown;
     return `<div class="row">
       <span class="dot ${meta.cls}"></span>
-      <div>
+      <div class="content">
         <div class="name">${s.name}</div>
         <div class="detail">${s.detail || ''}</div>
         <a href="${s.status_url}" target="_blank" rel="noopener">View official source →</a>
