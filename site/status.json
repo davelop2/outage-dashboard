@@ -1,75 +1,75 @@
 {
-  "generated_at": "2026-08-31T14:00:00+00:00",
+  "generated_at": "2026-08-31T18:35:15.646410+00:00",
   "services": {
     "microsoft365": {
       "name": "Microsoft 365 (admin center)",
       "status": "operational",
-      "detail": "Admin center de M365 disponible (no refleja incidentes por servicio/tenant)",
+      "detail": "M365 admin center available (does not reflect per-service/tenant incidents)",
       "status_url": "https://status.cloud.microsoft/m365/",
-      "checked_at": "2026-08-31T14:00:00+00:00"
+      "checked_at": "2026-08-31T18:35:15.646410+00:00"
     },
     "asana": {
       "name": "Asana",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.asana.com",
-      "checked_at": "2026-08-31T14:00:00+00:00"
+      "checked_at": "2026-08-31T18:35:15.646410+00:00"
     },
     "jira_atlassian": {
       "name": "Jira / Atlassian",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.atlassian.com",
-      "checked_at": "2026-08-31T14:00:00+00:00"
+      "checked_at": "2026-08-31T18:35:15.646410+00:00"
     },
     "aws": {
       "name": "AWS",
       "status": "manual",
-      "detail": "Sin JSON público unificado. Ver README para RSS por servicio/región.",
+      "detail": "AWS doesn't have a single public JSON with CORS support; the Service Health Dashboard is split by region/service via RSS. Tell me which AWS services (EC2, S3, RDS...) and regions you use, and I can generate the specific RSS feeds.",
       "status_url": "https://health.aws.amazon.com/health/status",
-      "checked_at": "2026-08-31T14:00:00+00:00"
+      "checked_at": "2026-08-31T18:35:15.646410+00:00"
     },
     "calltrackingmetrics": {
       "name": "Call Tracking Metrics",
-      "status": "operational",
-      "detail": "All Systems Operational",
+      "status": "unknown",
+      "detail": "Could not reach the status page (HTTP Error 403: Forbidden)",
       "status_url": "https://status.calltrackingmetrics.com",
-      "checked_at": "2026-08-31T14:00:00+00:00"
+      "checked_at": "2026-08-31T18:35:15.646410+00:00"
     },
     "docusign": {
       "name": "DocuSign",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.docusign.com",
-      "checked_at": "2026-08-31T14:00:00+00:00"
+      "checked_at": "2026-08-31T18:35:15.646410+00:00"
     },
     "salesforce": {
       "name": "Salesforce",
       "status": "operational",
       "detail": "Available",
       "status_url": "https://status.salesforce.com",
-      "checked_at": "2026-08-31T14:00:00+00:00"
+      "checked_at": "2026-08-31T18:35:15.646410+00:00"
     },
     "servicenow": {
       "name": "ServiceNow",
-      "status": "degraded",
-      "detail": "Incidente menor reportado en un componente",
+      "status": "unknown",
+      "detail": "Endpoint unavailable or changed. Review manually: https://status.servicenow.com",
       "status_url": "https://status.servicenow.com",
-      "checked_at": "2026-08-31T14:00:00+00:00"
+      "checked_at": "2026-08-31T18:35:15.646410+00:00"
     },
     "tableau": {
       "name": "Tableau Cloud",
-      "status": "operational",
-      "detail": "Available",
+      "status": "unknown",
+      "detail": "Could not reach the Salesforce Trust API ('api_url')",
       "status_url": "https://status.salesforce.com/products/Tableau",
-      "checked_at": "2026-08-31T14:00:00+00:00"
+      "checked_at": "2026-08-31T18:35:15.646410+00:00"
     },
     "zoom": {
       "name": "Zoom",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.zoom.us",
-      "checked_at": "2026-08-31T14:00:00+00:00"
+      "checked_at": "2026-08-31T18:35:15.646410+00:00"
     }
   }
 }
