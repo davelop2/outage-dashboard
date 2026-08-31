@@ -1,61 +1,61 @@
 {
-  "generated_at": "2026-08-31T19:04:54.674560+00:00",
+  "generated_at": "2026-08-31T19:11:55.208702+00:00",
   "services": {
     "microsoft365": {
       "name": "Microsoft 365 (admin center)",
       "status": "operational",
       "detail": "M365 admin center available (does not reflect per-service/tenant incidents)",
       "status_url": "https://status.cloud.microsoft/m365/",
-      "checked_at": "2026-08-31T19:04:54.674560+00:00"
+      "checked_at": "2026-08-31T19:11:55.208702+00:00"
     },
     "asana": {
       "name": "Asana",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.asana.com",
-      "checked_at": "2026-08-31T19:04:54.674560+00:00"
+      "checked_at": "2026-08-31T19:11:55.208702+00:00"
     },
     "jira_atlassian": {
       "name": "Jira / Atlassian",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.atlassian.com",
-      "checked_at": "2026-08-31T19:04:54.674560+00:00"
+      "checked_at": "2026-08-31T19:11:55.208702+00:00"
     },
     "docusign": {
       "name": "DocuSign",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.docusign.com",
-      "checked_at": "2026-08-31T19:04:54.674560+00:00"
+      "checked_at": "2026-08-31T19:11:55.208702+00:00"
     },
     "salesforce": {
       "name": "Salesforce",
       "status": "operational",
       "detail": "Available",
       "status_url": "https://status.salesforce.com",
-      "checked_at": "2026-08-31T19:04:54.674560+00:00"
+      "checked_at": "2026-08-31T19:11:55.208702+00:00"
     },
     "servicenow": {
       "name": "ServiceNow",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://servicenow.statuspage.io",
-      "checked_at": "2026-08-31T19:04:54.674560+00:00"
+      "checked_at": "2026-08-31T19:11:55.208702+00:00"
     },
     "tableau": {
       "name": "Tableau Cloud",
       "status": "operational",
       "detail": "Available",
       "status_url": "https://status.salesforce.com/products/Tableau",
-      "checked_at": "2026-08-31T19:04:54.674560+00:00"
+      "checked_at": "2026-08-31T19:11:55.208702+00:00"
     },
     "zoom": {
       "name": "Zoom",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.zoom.us",
-      "checked_at": "2026-08-31T19:04:54.674560+00:00"
+      "checked_at": "2026-08-31T19:11:55.208702+00:00"
     }
   }
 }
