@@ -1,0 +1,82 @@
+{
+  "services": [
+    {
+      "id": "microsoft365",
+      "name": "Microsoft 365 (admin center)",
+      "type": "ms_status_post",
+      "status_url": "https://status.cloud.microsoft/m365/",
+      "api_url": "https://status.cloud.microsoft/api/posts/mac",
+      "note": "Este endpoint público solo indica si el propio panel de administración de Microsoft 365 está accesible para los admins — NO si Exchange, Teams o SharePoint están caídos para los usuarios. Es una señal parcial/de respaldo. El estado real por servicio y por tenant sigue requiriendo Microsoft Graph (ServiceHealth.Read) con una app registrada en Entra ID."
+    },
+    {
+      "id": "asana",
+      "name": "Asana",
+      "type": "statuspage",
+      "status_url": "https://status.asana.com",
+      "api_url": "https://status.asana.com/api/v2/summary.json"
+    },
+    {
+      "id": "jira_atlassian",
+      "name": "Jira / Atlassian",
+      "type": "statuspage",
+      "status_url": "https://status.atlassian.com",
+      "api_url": "https://status.atlassian.com/api/v2/summary.json"
+    },
+    {
+      "id": "aws",
+      "name": "AWS",
+      "type": "manual",
+      "status_url": "https://health.aws.amazon.com/health/status",
+      "note": "AWS no tiene un JSON único con CORS público; el Service Health Dashboard es por región/servicio vía RSS. Si me dices qué servicios de AWS usan (EC2, S3, RDS...) y en qué región, puedo generar los feeds RSS específicos."
+    },
+    {
+      "id": "calltrackingmetrics",
+      "name": "Call Tracking Metrics",
+      "type": "statuspage",
+      "status_url": "https://status.calltrackingmetrics.com",
+      "api_url": "https://status.calltrackingmetrics.com/api/v2/summary.json"
+    },
+    {
+      "id": "docusign",
+      "name": "DocuSign",
+      "type": "statuspage",
+      "status_url": "https://status.docusign.com",
+      "api_url": "https://status.docusign.com/api/v2/summary.json"
+    },
+    {
+      "id": "salesforce",
+      "name": "Salesforce",
+      "type": "salesforce_trust",
+      "status_url": "https://status.salesforce.com",
+      "api_url": "https://api.status.salesforce.com/v1/instances/status/preview"
+    },
+    {
+      "id": "servicenow",
+      "name": "ServiceNow",
+      "type": "statuspage_best_effort",
+      "status_url": "https://status.servicenow.com",
+      "api_url": "https://status.servicenow.com/api/v2/summary.json"
+    },
+    {
+      "id": "tableau",
+      "name": "Tableau Cloud",
+      "type": "salesforce_trust_product",
+      "status_url": "https://status.salesforce.com/products/Tableau",
+      "product_name": "Tableau"
+    },
+    {
+      "id": "verizon",
+      "name": "Verizon",
+      "type": "manual",
+      "status_url": "https://www.verizon.com/support/network/",
+      "note": "Verizon no tiene una API pública de estado para clientes empresariales; el mapa de cobertura/outages es orientado a consumidores."
+    },
+    {
+      "id": "zoom",
+      "name": "Zoom",
+      "type": "statuspage",
+      "status_url": "https://status.zoom.us",
+      "api_url": "https://status.zoom.us/api/v2/summary.json"
+    }
+  ]
+}

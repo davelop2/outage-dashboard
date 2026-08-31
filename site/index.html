@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Estado de herramientas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EEF1F4;
+    --panel:#FFFFFF;
+    --ink:#1A2230;
+    --muted:#5B6472;
+    --line:#DADFE5;
+    --ok:#157F73;
+    --ok-bg:#E4F3F0;
+    --degraded:#B8730E;
+    --degraded-bg:#FBEEDD;
+    --down:#A82F20;
+    --down-bg:#FBE7E3;
+    --manual:#5B6472;
+    --manual-bg:#EBEDF0;
+    --indigo:#2F3A56;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:840px;margin:0 auto;padding:40px 24px 80px;}
+
+  header{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:28px;flex-wrap:wrap;}
+  h1{font-size:1.5rem;font-weight:600;margin:0 0 6px;letter-spacing:-0.01em;}
+  .sub{color:var(--muted);font-size:0.9rem;margin:0;}
+  .updated{font-family:"IBM Plex Mono",monospace;font-size:0.78rem;color:var(--muted);text-align:right;}
+
+  .summary{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap;}
+  .chip{font-size:0.82rem;padding:6px 12px;border-radius:3px;font-weight:500;display:flex;align-items:center;gap:7px;}
+  .chip .dot{width:7px;height:7px;border-radius:50%;display:inline-block;}
+  .chip.ok{background:var(--ok-bg);color:var(--ok);}
+  .chip.degraded{background:var(--degraded-bg);color:var(--degraded);}
+  .chip.down{background:var(--down-bg);color:var(--down);}
+  .chip.manual{background:var(--manual-bg);color:var(--manual);}
+
+  .board{background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden;}
+  .row{
+    display:grid;
+    grid-template-columns:20px 1fr auto;
+    gap:16px;
+    align-items:start;
+    padding:16px 20px;
+    border-bottom:1px solid var(--line);
+  }
+  .row:last-child{border-bottom:none;}
+  .row .dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+  .dot.ok{background:var(--ok);}
+  .dot.degraded{background:var(--degraded);}
+  .dot.down{background:var(--down);}
+  .dot.manual{background:var(--manual);}
+  .dot.unknown{background:#9AA3AF;}
+
+  .name{font-weight:500;font-size:0.98rem;}
+  .detail{color:var(--muted);font-size:0.85rem;margin-top:3px;line-height:1.4;}
+  .row a{color:var(--indigo);text-decoration:none;font-size:0.82rem;font-weight:500;}
+  .row a:hover{text-decoration:underline;}
+  .checked{font-family:"IBM Plex Mono",monospace;font-size:0.72rem;color:#9AA3AF;text-align:right;white-space:nowrap;}
+
+  .section-label{padding:10px 20px;font-size:0.78rem;color:var(--muted);background:#F7F8FA;border-bottom:1px solid var(--line);}
+
+  .empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:0.9rem;}
+
+  footer{margin-top:22px;font-size:0.78rem;color:var(--muted);}
+  footer a{color:var(--indigo);}
+
+  button#refresh{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:0.75rem;
+    border:1px solid var(--line);
+    background:var(--panel);
+    color:var(--ink);
+    padding:6px 12px;
+    border-radius:4px;
+    cursor:pointer;
+    margin-top:6px;
+  }
+  button#refresh:hover{background:#F7F8FA;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Estado de herramientas</h1>
+      <p class="sub">Fuentes oficiales de cada proveedor, actualizado automáticamente.</p>
+    </div>
+    <div class="updated">
+      <div id="updated-at">Cargando…</div>
+      <button id="refresh" onclick="load()">Actualizar ahora</button>
+    </div>
+  </header>
+
+  <div class="summary" id="summary"></div>
+  <div class="board" id="board"><div class="empty">Cargando estado…</div></div>
+
+  <footer>
+    Datos generados por el chequeo automático (GitHub Actions, cada 10 min). Los servicios marcados como
+    <strong>revisión manual</strong> no tienen una API pública sin autenticación; ver nota en cada fila.
+  </footer>
+</div>
+
+<script>
+const STATUS_META = {
+  operational: {label: "Operativo", cls: "ok"},
+  degraded:    {label: "Degradado", cls: "degraded"},
+  down:        {label: "Caído", cls: "down"},
+  manual:      {label: "Revisión manual", cls: "manual"},
+  unknown:     {label: "Sin datos", cls: "unknown"},
+};
+
+function order(status){
+  return {down:0, degraded:1, unknown:2, manual:3, operational:4}[status] ?? 5;
+}
+
+function fmtTime(iso){
+  try{
+    const d = new Date(iso);
+    return d.toLocaleString('es-CO', {dateStyle:'short', timeStyle:'short'});
+  }catch(e){ return iso; }
+}
+
+async function load(){
+  try{
+    const res = await fetch('status.json?_=' + Date.now());
+    if(!res.ok) throw new Error('sin datos aún');
+    const data = await res.json();
+    render(data);
+  }catch(e){
+    document.getElementById('board').innerHTML =
+      '<div class="empty">Todavía no hay un chequeo registrado. Se llenará en la primera ejecución del workflow.</div>';
+    document.getElementById('updated-at').textContent = 'Sin datos';
+  }
+}
+
+function render(data){
+  const services = Object.values(data.services || {});
+  document.getElementById('updated-at').textContent = 'Último chequeo: ' + fmtTime(data.generated_at);
+
+  const counts = {};
+  services.forEach(s => counts[s.status] = (counts[s.status]||0) + 1);
+  const summaryOrder = ['down','degraded','manual','operational'];
+  document.getElementById('summary').innerHTML = summaryOrder
+    .filter(k => counts[k])
+    .map(k => `<span class="chip ${STATUS_META[k].cls}"><span class="dot"></span>${counts[k]} ${STATUS_META[k].label.toLowerCase()}</span>`)
+    .join('');
+
+  const sorted = services.slice().sort((a,b) => order(a.status) - order(b.status));
+
+  document.getElementById('board').innerHTML = sorted.map(s => {
+    const meta = STATUS_META[s.status] || STATUS_META.unknown;
+    return `<div class="row">
+      <span class="dot ${meta.cls}"></span>
+      <div>
+        <div class="name">${s.name}</div>
+        <div class="detail">${s.detail || ''}</div>
+        <a href="${s.status_url}" target="_blank" rel="noopener">Ver fuente oficial →</a>
+      </div>
+      <div class="checked">${meta.label}<br>${fmtTime(s.checked_at)}</div>
+    </div>`;
+  }).join('') || '<div class="empty">No hay servicios configurados.</div>';
+}
+
+load();
+setInterval(load, 60000);
+</script>
+</body>
+</html>
