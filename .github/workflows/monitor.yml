@@ -3,7 +3,12 @@ name: Outage monitor
 on:
   schedule:
     - cron: "*/10 * * * *"   # every 10 minutes
-  workflow_dispatch: {}       # allows running it manually from GitHub
+  workflow_dispatch:
+    inputs:
+      test_alert:
+        description: "Send a test alert to Teams (doesn't wait for a real change)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -26,6 +31,7 @@ jobs:
           MS_TENANT_ID: ${{ secrets.MS_TENANT_ID }}
           MS_CLIENT_ID: ${{ secrets.MS_CLIENT_ID }}
           MS_CLIENT_SECRET: ${{ secrets.MS_CLIENT_SECRET }}
+          TEST_ALERT: ${{ inputs.test_alert }}
         run: python scripts/check_status.py
 
       - name: Copy snapshot to the published site
