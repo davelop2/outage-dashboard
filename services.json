@@ -32,9 +32,9 @@
     {
       "id": "calltrackingmetrics",
       "name": "Call Tracking Metrics",
-      "type": "statuspage",
+      "type": "html_scrape",
       "status_url": "https://status.calltrackingmetrics.com",
-      "api_url": "https://status.calltrackingmetrics.com/api/v2/summary.json"
+      "note": "This provider doesn't expose a JSON API like the others (their status page renders the text directly in the HTML, on a different platform). The check looks for an 'operational' banner in the page text — less precise than a real API, so treat it as a best-effort signal."
     },
     {
       "id": "docusign",
@@ -53,9 +53,9 @@
     {
       "id": "servicenow",
       "name": "ServiceNow",
-      "type": "statuspage_best_effort",
-      "status_url": "https://status.servicenow.com",
-      "api_url": "https://status.servicenow.com/api/v2/summary.json"
+      "type": "statuspage",
+      "status_url": "https://servicenow.statuspage.io",
+      "api_url": "https://servicenow.statuspage.io/api/v2/summary.json"
     },
     {
       "id": "tableau",
