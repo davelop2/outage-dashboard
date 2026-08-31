@@ -6,7 +6,7 @@
       "type": "ms_status_post",
       "status_url": "https://status.cloud.microsoft/m365/",
       "api_url": "https://status.cloud.microsoft/api/posts/mac",
-      "note": "Este endpoint público solo indica si el propio panel de administración de Microsoft 365 está accesible para los admins — NO si Exchange, Teams o SharePoint están caídos para los usuarios. Es una señal parcial/de respaldo. El estado real por servicio y por tenant sigue requiriendo Microsoft Graph (ServiceHealth.Read) con una app registrada en Entra ID."
+      "note": "This public endpoint only shows whether the Microsoft 365 admin center itself is reachable for admins — NOT whether Exchange, Teams, or SharePoint are down for users. It's a partial/backup signal. Real per-service, per-tenant status still requires Microsoft Graph (ServiceHealth.Read) with an app registered in Entra ID."
     },
     {
       "id": "asana",
@@ -27,7 +27,7 @@
       "name": "AWS",
       "type": "manual",
       "status_url": "https://health.aws.amazon.com/health/status",
-      "note": "AWS no tiene un JSON único con CORS público; el Service Health Dashboard es por región/servicio vía RSS. Si me dices qué servicios de AWS usan (EC2, S3, RDS...) y en qué región, puedo generar los feeds RSS específicos."
+      "note": "AWS doesn't have a single public JSON with CORS support; the Service Health Dashboard is split by region/service via RSS. Tell me which AWS services (EC2, S3, RDS...) and regions you use, and I can generate the specific RSS feeds."
     },
     {
       "id": "calltrackingmetrics",
@@ -63,13 +63,6 @@
       "type": "salesforce_trust_product",
       "status_url": "https://status.salesforce.com/products/Tableau",
       "product_name": "Tableau"
-    },
-    {
-      "id": "verizon",
-      "name": "Verizon",
-      "type": "manual",
-      "status_url": "https://www.verizon.com/support/network/",
-      "note": "Verizon no tiene una API pública de estado para clientes empresariales; el mapa de cobertura/outages es orientado a consumidores."
     },
     {
       "id": "zoom",
