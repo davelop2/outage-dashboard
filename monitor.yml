@@ -1,0 +1,55 @@
+name: Outage monitor
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"   # every 10 minutes
+  workflow_dispatch: {}       # allows running it manually from GitHub
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check each tool's status
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          MS_TENANT_ID: ${{ secrets.MS_TENANT_ID }}
+          MS_CLIENT_ID: ${{ secrets.MS_CLIENT_ID }}
+          MS_CLIENT_SECRET: ${{ secrets.MS_CLIENT_SECRET }}
+        run: python scripts/check_status.py
+
+      - name: Copy snapshot to the published site
+        run: cp data/status.json site/status.json
+
+      - name: Save snapshot to the repo
+        run: |
+          git config user.name "outage-bot"
+          git config user.email "outage-bot@users.noreply.github.com"
+          git add data/status.json site/status.json
+          git diff --quiet --cached || git commit -m "Update status [skip ci]"
+          git push
+
+      - name: Publish dashboard to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: check
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
