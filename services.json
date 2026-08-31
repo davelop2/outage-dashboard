@@ -62,6 +62,7 @@
       "name": "Tableau Cloud",
       "type": "salesforce_trust_product",
       "status_url": "https://status.salesforce.com/products/Tableau",
+      "api_url": "https://api.status.salesforce.com/v1/instances/status/preview",
       "product_name": "Tableau"
     },
     {
