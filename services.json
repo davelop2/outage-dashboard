@@ -10,11 +10,12 @@
     },
     {
       "id": "adobe",
-      "name": "Adobe",
+      "name": "Adobe (Creative Cloud & Document Cloud)",
       "type": "adobe_status",
       "status_url": "https://status.adobe.com",
       "api_url": "https://data.status.adobe.com/adobestatus/StatusEvents",
-      "note": "Uses Adobe's internal (undocumented) status feed, not an official public API. It reports across all Adobe clouds/products combined, not filtered to any specific one. If Adobe changes this feed's structure, it fails to 'no data' rather than a false 'operational'."
+      "clouds_filter": ["Creative Cloud", "Document Cloud"],
+      "note": "Uses Adobe's internal (undocumented) status feed, not an official public API, filtered to only Creative Cloud and Document Cloud incidents. If Adobe changes this feed's structure, it fails to 'no data' rather than a false 'operational'."
     },
     {
       "id": "asana",
