@@ -111,15 +111,25 @@ def check_adobe_status(service):
     open, the most recent entry in its 'history' dict gives the current
     severity. This isn't an official public API like Statuspage, so treat
     it as best-effort: if Adobe changes this shape, it fails safe to
-    UNKNOWN rather than a false 'operational'."""
+    UNKNOWN rather than a false 'operational'.
+
+    Optionally filtered to specific clouds via service["clouds_filter"]
+    (list of cloud names, e.g. ["Creative Cloud", "Document Cloud"]) — an
+    incident is only considered if at least one of its listed clouds
+    matches. Leave clouds_filter unset/empty to include everything."""
     try:
         data = http_get_json(service["api_url"])
         incidents = data.get("incidentEvent", {}).get("incidents", {})
+        clouds_filter = set(service.get("clouds_filter") or [])
         sev_rank = {"Trivial": 1, "Minor": 1, "Major": 2, "Critical": 2}
         sev_status = {1: DEGRADED, 2: DOWN}
         worst_rank = 0
         open_items = []
         for inc in incidents.values():
+            if clouds_filter:
+                inc_clouds = {c.get("name") for c in inc.get("clouds", {}).values()}
+                if not (inc_clouds & clouds_filter):
+                    continue  # this incident doesn't touch a cloud we care about
             for prod in inc.get("products", {}).values():
                 if prod.get("endedOn"):
                     continue  # resolved
