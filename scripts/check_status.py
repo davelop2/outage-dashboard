@@ -103,6 +103,44 @@ def check_html_scrape(service):
         return UNKNOWN, f"Could not reach the status page ({e})"
 
 
+def check_adobe_status(service):
+    """Adobe's internal (undocumented) status feed at
+    data.status.adobe.com/adobestatus/StatusEvents. It returns the FULL
+    incident history (hundreds of entries), not just active ones — an
+    incident/product is still open when it has no 'endedOn' timestamp; when
+    open, the most recent entry in its 'history' dict gives the current
+    severity. This isn't an official public API like Statuspage, so treat
+    it as best-effort: if Adobe changes this shape, it fails safe to
+    UNKNOWN rather than a false 'operational'."""
+    try:
+        data = http_get_json(service["api_url"])
+        incidents = data.get("incidentEvent", {}).get("incidents", {})
+        sev_rank = {"Trivial": 1, "Minor": 1, "Major": 2, "Critical": 2}
+        sev_status = {1: DEGRADED, 2: DOWN}
+        worst_rank = 0
+        open_items = []
+        for inc in incidents.values():
+            for prod in inc.get("products", {}).values():
+                if prod.get("endedOn"):
+                    continue  # resolved
+                history = prod.get("history", {})
+                if not history:
+                    continue
+                latest_key = max(history.keys(), key=lambda k: int(k))
+                latest = history[latest_key]
+                if latest.get("status") != "Opened":
+                    continue
+                rank = sev_rank.get(latest.get("severity", ""), 1)
+                worst_rank = max(worst_rank, rank)
+                open_items.append(f"{prod.get('name', 'Unknown')} ({latest.get('severity', 'unknown')})")
+        if not open_items:
+            return OK, "No open incidents reported"
+        status = sev_status.get(worst_rank, DEGRADED)
+        return status, "Open incident(s): " + ", ".join(open_items[:4])
+    except Exception as e:
+        return UNKNOWN, f"Could not reach Adobe's status feed ({e})"
+
+
 def check_ms_status_post(service):
     """Public endpoint at status.cloud.microsoft (no login, no CORS issue since
     this runs server-side). Note: 'mac' only reports whether the M365 admin
@@ -131,6 +169,7 @@ CHECKERS = {
     "salesforce_trust_product": check_salesforce_trust,  # simplified: same base endpoint
     "ms_status_post": check_ms_status_post,
     "html_scrape": check_html_scrape,
+    "adobe_status": check_adobe_status,
     "manual": check_manual,
 }
 # Note: check_statuspage_best_effort stays available for the day you add a
