@@ -9,11 +9,26 @@
       "note": "This public endpoint only shows whether the Microsoft 365 admin center itself is reachable for admins — NOT whether Exchange, Teams, or SharePoint are down for users. It's a partial/backup signal. Real per-service, per-tenant status still requires Microsoft Graph (ServiceHealth.Read) with an app registered in Entra ID."
     },
     {
+      "id": "adobe",
+      "name": "Adobe",
+      "type": "adobe_status",
+      "status_url": "https://status.adobe.com",
+      "api_url": "https://data.status.adobe.com/adobestatus/StatusEvents",
+      "note": "Uses Adobe's internal (undocumented) status feed, not an official public API. It reports across all Adobe clouds/products combined, not filtered to any specific one. If Adobe changes this feed's structure, it fails to 'no data' rather than a false 'operational'."
+    },
+    {
       "id": "asana",
       "name": "Asana",
       "type": "statuspage",
       "status_url": "https://status.asana.com",
       "api_url": "https://status.asana.com/api/v2/summary.json"
+    },
+    {
+      "id": "frameio",
+      "name": "Frame.io",
+      "type": "statuspage",
+      "status_url": "https://status.frame.io",
+      "api_url": "https://frame-io.statuspage.io/api/v2/summary.json"
     },
     {
       "id": "jira_atlassian",
