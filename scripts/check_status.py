@@ -49,7 +49,23 @@ def check_statuspage(service):
             "major": DOWN,
             "critical": DOWN,
         }
-        return mapping.get(indicator, UNKNOWN), description or indicator
+        status = mapping.get(indicator, UNKNOWN)
+        detail = description or indicator
+
+        # When something's actually wrong, pull the real incident name and
+        # its latest update instead of the generic indicator description —
+        # Statuspage's /summary.json includes the full incident list too.
+        incidents = data.get("incidents", [])
+        if status != OK and incidents:
+            incident = incidents[0]  # most recent
+            name = incident.get("name", "")
+            updates = incident.get("incident_updates", [])
+            latest_body = updates[0].get("body", "") if updates else ""
+            parts = [p for p in (name, latest_body) if p]
+            if parts:
+                detail = " — ".join(parts)
+
+        return status, detail[:400]
     except Exception as e:
         return UNKNOWN, f"Could not reach the status page ({e})"
 
@@ -146,7 +162,7 @@ def check_adobe_status(service):
         if not open_items:
             return OK, "No open incidents reported"
         status = sev_status.get(worst_rank, DEGRADED)
-        return status, "Open incident(s): " + ", ".join(open_items[:4])
+        return status, "Open incident(s): " + ", ".join(open_items[:6])
     except Exception as e:
         return UNKNOWN, f"Could not reach Adobe's status feed ({e})"
 
@@ -167,7 +183,7 @@ def check_ms_status_post(service):
         message = re.sub(r"\s+", " ", message).strip()
         if status_text.lower() == "available":
             return OK, "M365 admin center available (does not reflect per-service/tenant incidents)"
-        return DEGRADED, f"Reported status: {status_text or 'unknown'} — {message[:180]}"
+        return DEGRADED, f"Reported status: {status_text or 'unknown'} — {message[:400]}"
     except Exception as e:
         return UNKNOWN, f"Could not reach status.cloud.microsoft ({e})"
 
