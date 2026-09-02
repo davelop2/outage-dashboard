@@ -242,6 +242,28 @@ def get_graph_token():
         return json.loads(resp.read().decode("utf-8"))["access_token"]
 
 
+def get_active_issues_by_service(token):
+    """Fetches Microsoft's actual open issues (with real titles), grouped
+    by service name, e.g. {'Exchange Online': ['Users may see delayed mail
+    delivery in region X']}. This is a separate endpoint from
+    healthOverviews — that one only gives a status enum, no description."""
+    req = urllib.request.Request(
+        "https://graph.microsoft.com/v1.0/admin/serviceAnnouncement/issues"
+        "?$filter=isResolved eq false&$select=title,service,classification",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    by_service = {}
+    try:
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        for issue in data.get("value", []):
+            svc = issue.get("service", "Unknown service")
+            by_service.setdefault(svc, []).append(issue.get("title", "").strip())
+    except Exception as e:
+        print(f"Could not fetch Graph issue titles ({e}) — falling back to status enum only")
+    return by_service
+
+
 def check_ms_graph_all_services():
     """Returns a dict {id: {name, status, detail}} — one entry per M365
     service the tenant is subscribed to (Exchange, Teams, SharePoint...)."""
@@ -253,16 +275,25 @@ def check_ms_graph_all_services():
     with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
         data = json.loads(resp.read().decode("utf-8"))
 
+    issues_by_service = get_active_issues_by_service(token)
+
     results = {}
     for item in data.get("value", []):
         service_name = item.get("service", "Unknown service")
         raw_status = (item.get("status") or "").lower()
         status = GRAPH_STATUS_MAP.get(raw_status, UNKNOWN)
         service_id = "m365_" + service_name.lower().replace(" ", "_").replace("/", "_")
+
+        titles = issues_by_service.get(service_name, [])
+        if titles:
+            detail = "; ".join(titles[:3])
+        else:
+            detail = f"Graph status: {item.get('status', 'unknown')}"
+
         results[service_id] = {
             "name": f"Microsoft 365 — {service_name}",
             "status": status,
-            "detail": f"Graph status: {item.get('status', 'unknown')}",
+            "detail": detail[:400],
             "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
             "checked_at": datetime.now(timezone.utc).isoformat(),
         }
