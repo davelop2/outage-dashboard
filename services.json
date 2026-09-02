@@ -43,7 +43,7 @@
       "name": "DocuSign",
       "type": "manual",
       "status_url": "https://status.docusign.com",
-      "note": "DocuSign migrated to a new status portal (Next.js/Rootly-based) that doesn't expose a stable public JSON API like the old Statuspage.io one did — the previous integration broke when they switched. Their new site's data endpoint is tied to a build ID that changes on every deploy, making it too fragile to automate reliably. Check manually via the link."
+      "note": "No stable public API available. Check manually via the link."
     },
     {
       "id": "salesforce",
