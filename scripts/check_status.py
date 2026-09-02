@@ -247,9 +247,12 @@ def get_active_issues_by_service(token):
     by service name, e.g. {'Exchange Online': ['Users may see delayed mail
     delivery in region X']}. This is a separate endpoint from
     healthOverviews — that one only gives a status enum, no description."""
+    params = urllib.parse.urlencode(
+        {"$filter": "isResolved eq false", "$select": "title,service,classification"},
+        quote_via=urllib.parse.quote,
+    )
     req = urllib.request.Request(
-        "https://graph.microsoft.com/v1.0/admin/serviceAnnouncement/issues"
-        "?$filter=isResolved eq false&$select=title,service,classification",
+        f"https://graph.microsoft.com/v1.0/admin/serviceAnnouncement/issues?{params}",
         headers={"Authorization": f"Bearer {token}"},
     )
     by_service = {}
