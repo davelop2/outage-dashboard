@@ -37,10 +37,48 @@ def http_get_json(url):
         return json.loads(resp.read().decode("utf-8"))
 
 
+STATUSPAGE_COMPONENT_STATUS = {
+    "operational": OK,
+    "degraded_performance": DEGRADED,
+    "partial_outage": DEGRADED,
+    "major_outage": DOWN,
+    "under_maintenance": DEGRADED,
+}
+
+
 def check_statuspage(service):
-    """Services on Atlassian Statuspage.io: Asana, Jira/Atlassian, Zoom, DocuSign, etc."""
+    """Services on Atlassian Statuspage.io: Asana, Jira/Atlassian, Zoom, DocuSign, etc.
+
+    Optionally filtered to specific regions via service["region_filter"]
+    (list of substrings matched case-insensitively against component
+    names, e.g. ["US", "USA", "United States"]). When set, status is
+    computed only from matching components instead of the page-wide
+    indicator — useful for vendors that publish one page covering many
+    countries/regions. Falls back to the page-wide indicator if no
+    component name matches (rather than silently hiding the tool)."""
     try:
         data = http_get_json(service["api_url"])
+        region_filter = [r.lower() for r in service.get("region_filter", [])]
+
+        if region_filter:
+            components = data.get("components", [])
+            matched = [c for c in components if any(r in (c.get("name") or "").lower() for r in region_filter)]
+            if matched:
+                worst = OK
+                worst_rank = {OK: 0, DEGRADED: 1, DOWN: 2}
+                detail_parts = []
+                for c in matched:
+                    s = STATUSPAGE_COMPONENT_STATUS.get(c.get("status", "operational"), UNKNOWN)
+                    if s != OK:
+                        detail_parts.append(f"{c.get('name')}: {c.get('status')}")
+                    if worst_rank.get(s, 0) > worst_rank.get(worst, 0):
+                        worst = s
+                if worst == OK:
+                    return OK, f"All matched regions operational ({len(matched)} component(s))"
+                return worst, "; ".join(detail_parts)[:400]
+            # no component matched the region filter — fall back below,
+            # but say so, since this is the whole-page status, not the region's
+
         indicator = data.get("status", {}).get("indicator", "unknown")
         description = data.get("status", {}).get("description", "")
         mapping = {
@@ -64,6 +102,9 @@ def check_statuspage(service):
             parts = [p for p in (name, latest_body) if p]
             if parts:
                 detail = " — ".join(parts)
+
+        if region_filter:
+            detail = f"(no component matched region filter — showing overall) {detail}"
 
         return status, detail[:400]
     except Exception as e:
@@ -95,6 +136,89 @@ def check_salesforce_trust(service):
         return UNKNOWN, "No instance data returned"
     except Exception as e:
         return UNKNOWN, f"Could not reach the Salesforce Trust API ({e})"
+
+
+def http_get_text(url):
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "Mozilla/5.0 (compatible; outage-dashboard/1.0; +https://github.com)",
+    })
+    with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+        return resp.read().decode("utf-8", errors="ignore")
+
+
+def check_apple_status(service):
+    """Apple's public (unofficial but long-stable) system status feed. It's
+    JSONP, not plain JSON — wrapped like callback({...}) — so we strip the
+    wrapper before parsing. Filtered to one specific service name via
+    service["apple_service_name"]."""
+    try:
+        text = http_get_text(service["api_url"])
+        json_str = text[text.index("(") + 1: text.rindex(")")]
+        data = json.loads(json_str)
+        target = service.get("apple_service_name", "")
+        services = data.get("services", [])
+        match = next((s for s in services if s.get("serviceName", "").strip().lower() == target.lower()), None)
+        if match is None:
+            return UNKNOWN, f"'{target}' not found in Apple's status feed"
+        events = match.get("events", [])
+        ongoing = [e for e in events if (e.get("eventStatus") or "").lower() not in ("resolved", "completed", "")]
+        if not ongoing:
+            return OK, f"{target}: no current issues reported"
+        e = ongoing[0]
+        return DEGRADED, f"{target}: {e.get('message', 'Issue reported')}"
+    except Exception as e:
+        return UNKNOWN, f"Could not reach Apple's status feed ({e})"
+
+
+STATUS_IO_CODE_MAP_THRESHOLDS = ((200, OK), (400, DEGRADED))
+
+
+def _status_io_code_to_status(code):
+    for threshold, status in STATUS_IO_CODE_MAP_THRESHOLDS:
+        if code < threshold:
+            return status
+    return DOWN
+
+
+def check_status_io(service):
+    """Status.io-hosted pages (Databricks, etc.) — different JSON shape
+    from Statuspage.io. Structure: result.status is a list of service
+    groups, each optionally with a 'containers' list of per-region rows.
+    Optionally filtered to specific regions via service["region_filter"]
+    (substrings matched against container/group names)."""
+    try:
+        data = http_get_json(service["api_url"])
+        result = data.get("result", {})
+        region_filter = [r.lower() for r in service.get("region_filter", [])]
+
+        worst_code = 100
+        flagged = []
+        any_match = not region_filter  # if no filter, everything "matches"
+
+        for group in result.get("status", []):
+            rows = group.get("containers") or [group]
+            for row in rows:
+                name = row.get("name", "")
+                if region_filter:
+                    if not any(r in name.lower() for r in region_filter):
+                        continue
+                    any_match = True
+                code = row.get("status_code", 100)
+                if code >= 200:
+                    flagged.append(f"{group.get('name')} — {name}: {row.get('status')}")
+                worst_code = max(worst_code, code)
+
+        if region_filter and not any_match:
+            overall = result.get("status_overall", {})
+            return _status_io_code_to_status(overall.get("status_code", 100)), \
+                f"No component matched region filter — overall: {overall.get('status', 'unknown')}"
+
+        status = _status_io_code_to_status(worst_code)
+        if status == OK:
+            return OK, "All matched regions operational"
+        return status, "; ".join(flagged[:4])[:400]
+    except Exception as e:
+        return UNKNOWN, f"Could not reach the status feed ({e})"
 
 
 def check_manual(service):
@@ -196,6 +320,8 @@ CHECKERS = {
     "ms_status_post": check_ms_status_post,
     "html_scrape": check_html_scrape,
     "adobe_status": check_adobe_status,
+    "apple_status": check_apple_status,
+    "status_io": check_status_io,
     "manual": check_manual,
 }
 # Note: check_statuspage_best_effort stays available for the day you add a
