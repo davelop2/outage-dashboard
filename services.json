@@ -73,6 +73,80 @@
       "type": "statuspage",
       "status_url": "https://status.zoom.us",
       "api_url": "https://status.zoom.us/api/v2/summary.json"
+    },
+    {
+      "id": "apple_business_manager",
+      "name": "Apple Business Manager",
+      "type": "apple_status",
+      "status_url": "https://www.apple.com/support/systemstatus/",
+      "api_url": "https://www.apple.com/support/systemstatus/data/system_status_en_US.js",
+      "apple_service_name": "Apple Business"
+    },
+    {
+      "id": "calltrackingmetrics",
+      "name": "Call Tracking Metrics",
+      "type": "manual",
+      "status_url": "https://status.calltrackingmetrics.com",
+      "note": "Their status page blocks automated requests from cloud/datacenter IPs (Cloudflare-style bot protection) — confirmed after multiple approaches. Check manually via the link."
+    },
+    {
+      "id": "checkpoint",
+      "name": "Check Point (USA)",
+      "type": "statuspage",
+      "status_url": "https://status.checkpoint.com",
+      "api_url": "https://status.checkpoint.com/api/v2/summary.json",
+      "region_filter": ["us", "usa", "united states", "americas"]
+    },
+    {
+      "id": "dashlane",
+      "name": "Dashlane",
+      "type": "manual",
+      "status_url": "https://status.dashlane.com",
+      "note": "Their status page (Status.io) embeds data directly in the page rather than a discoverable public API endpoint. Check manually via the link."
+    },
+    {
+      "id": "databricks",
+      "name": "Databricks (USA)",
+      "type": "status_io",
+      "status_url": "https://status.azuredatabricks.net",
+      "api_url": "https://status.azuredatabricks.net/1.0/status/5d49ec10226b9e13cb6a422e",
+      "region_filter": ["us", "usa", "united states"]
+    },
+    {
+      "id": "godaddy",
+      "name": "GoDaddy",
+      "type": "statuspage",
+      "status_url": "https://status.godaddy.com",
+      "api_url": "https://status.godaddy.com/api/v2/summary.json"
+    },
+    {
+      "id": "ensora",
+      "name": "Ensora",
+      "type": "manual",
+      "status_url": "https://experience.ensorahealth.com/p/status-eh",
+      "note": "Hosted on a community platform (not a standard status API). Check manually via the link."
+    },
+    {
+      "id": "foxit",
+      "name": "Foxit",
+      "type": "manual",
+      "status_url": "https://status.foxit.com",
+      "note": "No stable public API found. Check manually via the link."
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "type": "statuspage",
+      "status_url": "https://www.githubstatus.com",
+      "api_url": "https://www.githubstatus.com/api/v2/summary.json"
+    },
+    {
+      "id": "snowflake",
+      "name": "Snowflake (USA)",
+      "type": "statuspage",
+      "status_url": "https://status.snowflake.com",
+      "api_url": "https://status.snowflake.com/api/v2/summary.json",
+      "region_filter": ["us", "usa", "united states", "n. virginia", "oregon", "ohio"]
     }
   ]
 }
