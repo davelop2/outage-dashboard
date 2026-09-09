@@ -74,6 +74,12 @@
   .row a:hover{text-decoration:underline;}
   .checked{flex:0 0 auto;font-family:"IBM Plex Mono",monospace;font-size:0.72rem;color:#9AA3AF;text-align:right;white-space:nowrap;}
 
+  .row-group{cursor:pointer;background:#FAFBFC;}
+  .row-group:hover{background:#F3F5F7;}
+  .row-group .group-count{color:var(--muted);font-weight:400;font-size:0.85rem;}
+  .row-nested{padding-left:40px;background:#FCFCFD;}
+  .row-nested .name{font-size:0.9rem;}
+
   .section-label{padding:10px 20px;font-size:0.78rem;color:var(--muted);background:#F7F8FA;border-bottom:1px solid var(--line);}
 
   .empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:0.9rem;}
@@ -149,11 +155,57 @@ function escapeHtml(str){
   return div.innerHTML;
 }
 
+let lastData = null;
+let m365Expanded = false;
+
+function toggleM365(){
+  m365Expanded = !m365Expanded;
+  if(lastData) render(lastData);
+}
+
+function renderRow(s, indent){
+  const meta = STATUS_META[s.status] || STATUS_META.unknown;
+  return `<div class="row${indent ? ' row-nested' : ''}">
+      <span class="dot ${meta.cls}"></span>
+      <div class="content">
+        <div class="name">${escapeHtml(s.name)}</div>
+        <div class="detail">${escapeHtml(s.detail || '')}</div>
+        <a href="${escapeHtml(s.status_url)}" target="_blank" rel="noopener">View official source →</a>
+      </div>
+      <div class="checked">${meta.label}<br>${fmtTime(s.checked_at)}</div>
+    </div>`;
+}
+
+function renderGroup(name, members){
+  const worst = members.slice().sort((a,b) => order(a.status) - order(b.status))[0];
+  const meta = STATUS_META[worst.status] || STATUS_META.unknown;
+  const counts = {};
+  members.forEach(m => counts[m.status] = (counts[m.status]||0) + 1);
+  const summaryOrder = ['down','degraded','manual','unknown','operational'];
+  const countText = summaryOrder.filter(k => counts[k]).map(k => `${counts[k]} ${STATUS_META[k].label.toLowerCase()}`).join(', ');
+  const arrow = m365Expanded ? '▾' : '▸';
+
+  const header = `<div class="row row-group" onclick="toggleM365()">
+      <span class="dot ${meta.cls}"></span>
+      <div class="content">
+        <div class="name">${arrow} ${escapeHtml(name)} <span class="group-count">(${members.length} services)</span></div>
+        <div class="detail">${escapeHtml(countText)}</div>
+      </div>
+      <div class="checked">${meta.label}<br>${fmtTime(worst.checked_at)}</div>
+    </div>`;
+
+  if(!m365Expanded) return header;
+
+  const childrenSorted = members.slice().sort((a,b) => order(a.status) - order(b.status));
+  return header + childrenSorted.map(m => renderRow(m, true)).join('');
+}
+
 async function load(){
   try{
     const res = await fetch('status.json?_=' + Date.now());
     if(!res.ok) throw new Error('no data yet');
     const data = await res.json();
+    lastData = data;
     render(data);
   }catch(e){
     document.getElementById('board').innerHTML =
@@ -174,20 +226,23 @@ function render(data){
     .map(k => `<span class="chip ${STATUS_META[k].cls}"><span class="dot"></span>${counts[k]} ${STATUS_META[k].label.toLowerCase()}</span>`)
     .join('');
 
-  const sorted = services.slice().sort((a,b) => order(a.status) - order(b.status));
+  // Group every "Microsoft 365 — <service>" row (from the Graph integration)
+  // into a single collapsible entry instead of flooding the list.
+  const M365_PREFIX = 'Microsoft 365 — ';
+  const m365Members = services.filter(s => s.name.startsWith(M365_PREFIX));
+  const rest = services.filter(s => !s.name.startsWith(M365_PREFIX));
 
-  document.getElementById('board').innerHTML = sorted.map(s => {
-    const meta = STATUS_META[s.status] || STATUS_META.unknown;
-    return `<div class="row">
-      <span class="dot ${meta.cls}"></span>
-      <div class="content">
-        <div class="name">${escapeHtml(s.name)}</div>
-        <div class="detail">${escapeHtml(s.detail || '')}</div>
-        <a href="${escapeHtml(s.status_url)}" target="_blank" rel="noopener">View official source →</a>
-      </div>
-      <div class="checked">${meta.label}<br>${fmtTime(s.checked_at)}</div>
-    </div>`;
-  }).join('') || '<div class="empty">No services configured.</div>';
+  const items = rest.map(s => ({ sortStatus: s.status, render: () => renderRow(s, false) }));
+  if(m365Members.length > 1){
+    const worstStatus = m365Members.slice().sort((a,b) => order(a.status) - order(b.status))[0].status;
+    items.push({ sortStatus: worstStatus, render: () => renderGroup('Microsoft 365', m365Members) });
+  } else {
+    m365Members.forEach(s => items.push({ sortStatus: s.status, render: () => renderRow(s, false) }));
+  }
+
+  const sorted = items.slice().sort((a,b) => order(a.sortStatus) - order(b.sortStatus));
+
+  document.getElementById('board').innerHTML = sorted.map(i => i.render()).join('') || '<div class="empty">No services configured.</div>';
 }
 
 load();
