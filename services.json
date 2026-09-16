@@ -46,11 +46,19 @@
       "note": "No stable public API available. Check manually via the link."
     },
     {
-      "id": "salesforce",
-      "name": "Salesforce",
-      "type": "salesforce_trust",
-      "status_url": "https://status.salesforce.com",
-      "api_url": "https://api.status.salesforce.com/v1/instances/status/preview"
+      "id": "salesforce_aba",
+      "name": "Salesforce — ABA Centers (USA470)",
+      "type": "salesforce_instance",
+      "status_url": "https://status.salesforce.com/instances/USA470",
+      "api_url": "https://api.status.salesforce.com/v1/instances/USA470/status",
+      "note": "This instance migrates to USA1222 around Sep 20, 2026 — update api_url/status_url here once that happens."
+    },
+    {
+      "id": "salesforce_marquis",
+      "name": "Salesforce — Marquis MD (USA374)",
+      "type": "salesforce_instance",
+      "status_url": "https://status.salesforce.com/instances/USA374",
+      "api_url": "https://api.status.salesforce.com/v1/instances/USA374/status"
     },
     {
       "id": "servicenow",
