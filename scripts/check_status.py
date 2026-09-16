@@ -138,6 +138,36 @@ def check_salesforce_trust(service):
         return UNKNOWN, f"Could not reach the Salesforce Trust API ({e})"
 
 
+def check_salesforce_instance(service):
+    """Checks ONE specific Salesforce instance (e.g. USA470) directly —
+    more reliable than the old bulk 'preview' endpoint, which didn't
+    reliably reflect real ongoing incidents. The instance's own 'status'
+    field ('OK', 'MINOR_INCIDENT', 'MAJOR_INCIDENT', 'MAINTENANCE') is the
+    ground truth; when it's not OK, we surface the most recent update from
+    the instance's own unresolved incident, if any."""
+    try:
+        data = http_get_json(service["api_url"])
+        top_status = (data.get("status") or "OK").upper()
+        mapping = {"OK": OK, "MINOR_INCIDENT": DEGRADED, "MAINTENANCE": DEGRADED, "MAJOR_INCIDENT": DOWN}
+        status = mapping.get(top_status, DEGRADED)
+
+        if status == OK:
+            return OK, "Available"
+
+        incidents = data.get("Incidents", [])
+        active = [i for i in incidents if (i.get("status") or "").lower() != "resolved"]
+        if active:
+            inc = active[0]
+            events = inc.get("IncidentEvents", [])
+            latest_msg = events[-1].get("message", "") if events else inc.get("message", "")
+            detail = f"{inc.get('type', 'Incident')}: {latest_msg}"
+        else:
+            detail = f"Instance status: {top_status}"
+        return status, detail[:400]
+    except Exception as e:
+        return UNKNOWN, f"Could not reach Salesforce Trust API for this instance ({e})"
+
+
 def http_get_text(url):
     req = urllib.request.Request(url, headers={
         "User-Agent": "Mozilla/5.0 (compatible; outage-dashboard/1.0; +https://github.com)",
@@ -317,6 +347,7 @@ CHECKERS = {
     "statuspage_best_effort": check_statuspage_best_effort,
     "salesforce_trust": check_salesforce_trust,
     "salesforce_trust_product": check_salesforce_trust,  # simplified: same base endpoint
+    "salesforce_instance": check_salesforce_instance,
     "ms_status_post": check_ms_status_post,
     "html_scrape": check_html_scrape,
     "adobe_status": check_adobe_status,
