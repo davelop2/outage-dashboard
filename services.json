@@ -147,6 +147,71 @@
       "status_url": "https://status.snowflake.com",
       "api_url": "https://status.snowflake.com/api/v2/summary.json",
       "region_filter": ["us", "usa", "united states", "n. virginia", "oregon", "ohio"]
+    },
+    {
+      "id": "smartsheet",
+      "name": "Smartsheet",
+      "type": "statuspage",
+      "status_url": "https://status.smartsheet.com",
+      "api_url": "https://status.smartsheet.com/api/v2/summary.json"
+    },
+    {
+      "id": "workato",
+      "name": "Workato",
+      "type": "statuspage",
+      "status_url": "https://status.workato.com",
+      "api_url": "https://status.workato.com/api/v2/summary.json"
+    },
+    {
+      "id": "teamviewer",
+      "name": "TeamViewer",
+      "type": "statuspage",
+      "status_url": "https://status.teamviewer.com",
+      "api_url": "https://status.teamviewer.com/api/v2/summary.json"
+    },
+    {
+      "id": "sentinelone",
+      "name": "SentinelOne",
+      "type": "statuspage",
+      "status_url": "https://status.sentinelone.com",
+      "api_url": "https://status.sentinelone.com/api/v2/summary.json"
+    },
+    {
+      "id": "rubrik",
+      "name": "Rubrik",
+      "type": "statuspage",
+      "status_url": "https://status.rubrik.com",
+      "api_url": "https://status.rubrik.com/api/v2/summary.json",
+      "note": "Only covers login availability for Rubrik Security Cloud on this public page. Full per-component status requires signing in at rubrik.statuspage.io with a support portal account."
+    },
+    {
+      "id": "knowbe4",
+      "name": "KnowBe4",
+      "type": "statuspage",
+      "status_url": "https://status.knowbe4.com",
+      "api_url": "https://status.knowbe4.com/api/v2/summary.json"
+    },
+    {
+      "id": "claude",
+      "name": "Claude (Anthropic)",
+      "type": "statuspage",
+      "status_url": "https://status.anthropic.com",
+      "api_url": "https://status.anthropic.com/api/v2/summary.json"
+    },
+    {
+      "id": "meraki",
+      "name": "Cisco Meraki (USA)",
+      "type": "statuspage",
+      "status_url": "https://status.meraki.net",
+      "api_url": "https://status.meraki.net/api/v2/summary.json",
+      "region_filter": ["us", "usa", "united states", "north and south america", "americas"]
+    },
+    {
+      "id": "workable",
+      "name": "Workable",
+      "type": "statuspage",
+      "status_url": "https://workable.statuspage.io",
+      "api_url": "https://workable.statuspage.io/api/v2/summary.json"
     }
   ]
 }
