@@ -215,6 +215,13 @@
       "region_filter": ["us", "usa", "united states", "north and south america", "americas"]
     },
     {
+      "id": "collaboratemd",
+      "name": "CollaborateMD",
+      "type": "statuspage",
+      "status_url": "https://collaboratemd.statuspage.io",
+      "api_url": "https://collaboratemd.statuspage.io/api/v2/summary.json"
+    },
+    {
       "id": "workable",
       "name": "Workable",
       "type": "statuspage",
