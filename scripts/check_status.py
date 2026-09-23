@@ -474,8 +474,10 @@ def load_previous():
     return {}
 
 
-def send_teams_alert(changed):
-    """Sends a MessageCard to a Teams Workflows webhook.
+def send_teams_alert(worsened, recovered):
+    """Sends a MessageCard to a Teams Workflows webhook — covering both
+    services that just got worse (operational → degraded/down) and
+    services that just recovered (degraded/down → operational).
     IMPORTANT: since May 2026 the classic 'Incoming Webhook' connectors from
     Office 365 Connectors no longer work. You need a webhook created with the
     'Workflows' app in Teams (template: 'Send webhook alerts to a channel'),
@@ -485,22 +487,41 @@ def send_teams_alert(changed):
         print("TEAMS_WEBHOOK_URL not set — skipping the Teams notification.")
         return
 
-    facts = [{"name": c["name"], "value": f"{c['from']} → {c['to']}"} for c in changed]
-    worst = "down" if any(c["to"] == DOWN for c in changed) else "degraded"
-    color = "B3311F" if worst == "down" else "C77D18"
-    title = "🔴 Outage detected" if worst == "down" else "🟡 Degradation detected"
+    sections = []
+
+    if worsened:
+        worst = "down" if any(c["to"] == DOWN for c in worsened) else "degraded"
+        title = "🔴 Outage detected" if worst == "down" else "🟡 Degradation detected"
+        sections.append({
+            "activityTitle": title,
+            "activitySubtitle": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+            "facts": [{"name": c["name"], "value": f"{c['from']} → {c['to']}"} for c in worsened],
+            "markdown": True,
+        })
+
+    if recovered:
+        sections.append({
+            "activityTitle": "✅ Recovered",
+            "activitySubtitle": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+            "facts": [{"name": c["name"], "value": f"{c['from']} → {c['to']}"} for c in recovered],
+            "markdown": True,
+        })
+
+    # Card-level color/summary reflect the most severe thing that happened;
+    # a simultaneous recovery elsewhere still shows in its own section above.
+    if worsened:
+        color = "B3311F" if any(c["to"] == DOWN for c in worsened) else "C77D18"
+        summary = sections[0]["activityTitle"]
+    else:
+        color = "157F73"
+        summary = "✅ Recovered"
 
     card = {
         "@type": "MessageCard",
         "@context": "http://schema.org/extensions",
         "themeColor": color,
-        "summary": title,
-        "sections": [{
-            "activityTitle": title,
-            "activitySubtitle": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
-            "facts": facts,
-            "markdown": True,
-        }],
+        "summary": summary,
+        "sections": sections,
     }
 
     req = urllib.request.Request(
@@ -524,7 +545,16 @@ def main():
     now = datetime.now(timezone.utc).isoformat()
 
     results = {}
-    changed = []
+    worsened = []
+    recovered = []
+
+    def track_transition(name, prev_status, new_status):
+        if not prev_status or prev_status == new_status:
+            return
+        if new_status in (DEGRADED, DOWN):
+            worsened.append({"name": name, "from": prev_status, "to": new_status})
+        elif new_status == OK and prev_status in (DEGRADED, DOWN):
+            recovered.append({"name": name, "from": prev_status, "to": new_status})
 
     for service in config:
         # Microsoft 365: if Graph credentials exist, swap the generic check
@@ -535,8 +565,7 @@ def main():
                 for sid, row in graph_results.items():
                     results[sid] = row
                     prev_status = previous.get(sid, {}).get("status")
-                    if prev_status and prev_status != row["status"] and row["status"] in (DEGRADED, DOWN):
-                        changed.append({"name": row["name"], "from": prev_status, "to": row["status"]})
+                    track_transition(row["name"], prev_status, row["status"])
                 continue
             except Exception as e:
                 print(f"Graph call failed, falling back to the public M365 signal ({e})")
@@ -553,15 +582,15 @@ def main():
         }
 
         prev_status = previous.get(service["id"], {}).get("status")
-        # Only alert when it worsens to degraded/down (avoids noise from 'manual'/'unknown')
-        if prev_status and prev_status != status and status in (DEGRADED, DOWN):
-            changed.append({"name": service["name"], "from": prev_status, "to": status})
+        # Alerts on worsening to degraded/down AND on recovering back to
+        # operational (avoids noise from 'manual'/'unknown' either way).
+        track_transition(service["name"], prev_status, status)
 
     # Manual test trigger (workflow_dispatch checkbox) — sends a real Teams
     # alert through the exact same code path as a real incident, without
     # touching the actual status data.
     if os.environ.get("TEST_ALERT", "").lower() in ("true", "1"):
-        changed.append({"name": "Test alert (manually triggered)", "from": "operational", "to": "down"})
+        worsened.append({"name": "Test alert (manually triggered)", "from": "operational", "to": "down"})
 
     snapshot = {"generated_at": now, "services": results}
 
@@ -569,8 +598,8 @@ def main():
     with open(STATUS_FILE, "w", encoding="utf-8") as f:
         json.dump(snapshot, f, indent=2, ensure_ascii=False)
 
-    if changed:
-        send_teams_alert(changed)
+    if worsened or recovered:
+        send_teams_alert(worsened, recovered)
     else:
         print("No changes to alert on.")
 
