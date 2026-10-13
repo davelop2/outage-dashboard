@@ -1,222 +1,222 @@
 {
-  "generated_at": "2026-10-12T22:31:26.886925+00:00",
+  "generated_at": "2026-10-13T03:07:41.744263+00:00",
   "services": {
     "microsoft365": {
       "name": "Microsoft 365 (admin center)",
       "status": "operational",
       "detail": "M365 admin center available (does not reflect per-service/tenant incidents)",
       "status_url": "https://status.cloud.microsoft/m365/",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "adobe": {
       "name": "Adobe (Creative Cloud & Document Cloud)",
       "status": "operational",
       "detail": "No open incidents reported",
       "status_url": "https://status.adobe.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "asana": {
       "name": "Asana",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.asana.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "frameio": {
       "name": "Frame.io",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.frame.io",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "jira_atlassian": {
       "name": "Jira / Atlassian",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.atlassian.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "docusign": {
       "name": "DocuSign",
       "status": "manual",
       "detail": "No stable public API available. Check manually via the link.",
       "status_url": "https://status.docusign.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "salesforce_aba": {
       "name": "Salesforce — ABA Centers (USA470)",
       "status": "operational",
       "detail": "Available",
       "status_url": "https://status.salesforce.com/instances/USA470",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "salesforce_marquis": {
       "name": "Salesforce — Marquis MD (USA374)",
       "status": "operational",
       "detail": "Available",
       "status_url": "https://status.salesforce.com/instances/USA374",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "servicenow": {
       "name": "ServiceNow",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://servicenow.statuspage.io",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "tableau": {
       "name": "Tableau Cloud",
       "status": "operational",
       "detail": "Available",
       "status_url": "https://status.salesforce.com/products/Tableau",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "zoom": {
       "name": "Zoom",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.zoom.us",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "apple_business_manager": {
       "name": "Apple Business Manager",
       "status": "operational",
       "detail": "Apple Business: no current issues reported",
       "status_url": "https://www.apple.com/support/systemstatus/",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "calltrackingmetrics": {
       "name": "Call Tracking Metrics",
       "status": "manual",
       "detail": "Their status page blocks automated requests from cloud/datacenter IPs (Cloudflare-style bot protection) — confirmed after multiple approaches. Check manually via the link.",
       "status_url": "https://status.calltrackingmetrics.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "checkpoint": {
       "name": "Check Point (USA)",
       "status": "operational",
       "detail": "All matched regions operational (55 component(s))",
       "status_url": "https://status.checkpoint.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "dashlane": {
       "name": "Dashlane",
       "status": "manual",
       "detail": "Their status page (Status.io) embeds data directly in the page rather than a discoverable public API endpoint. Check manually via the link.",
       "status_url": "https://status.dashlane.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "databricks": {
       "name": "Databricks (USA)",
       "status": "operational",
       "detail": "All matched regions operational",
       "status_url": "https://status.azuredatabricks.net",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "godaddy": {
       "name": "GoDaddy",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.godaddy.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "ensora": {
       "name": "Ensora",
       "status": "manual",
       "detail": "Hosted on a community platform (not a standard status API). Check manually via the link.",
       "status_url": "https://experience.ensorahealth.com/p/status-eh",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "foxit": {
       "name": "Foxit",
       "status": "manual",
       "detail": "No stable public API found. Check manually via the link.",
       "status_url": "https://status.foxit.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "github": {
       "name": "GitHub",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://www.githubstatus.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "snowflake": {
       "name": "Snowflake (USA)",
       "status": "degraded",
       "detail": "Virtual Warehouses: degraded_performance; GCP - US Central 1 (Iowa): degraded_performance",
       "status_url": "https://status.snowflake.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "smartsheet": {
       "name": "Smartsheet",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.smartsheet.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "workato": {
       "name": "Workato",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.workato.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "teamviewer": {
       "name": "TeamViewer",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.teamviewer.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "sentinelone": {
       "name": "SentinelOne",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.sentinelone.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "rubrik": {
       "name": "Rubrik",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.rubrik.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "knowbe4": {
       "name": "KnowBe4",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.knowbe4.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "claude": {
       "name": "Claude (Anthropic)",
       "status": "degraded",
       "detail": "Elevated errors on platform.claude.com — We've mitigated the errors loading usage data on platform.claude.com and in the Admin API usage report. While we work on a full fix, the most recent ~30 minutes of usage may take longer to appear on the platform.claude.com. API requests are not affected, and we will provide additional updates here.",
       "status_url": "https://status.anthropic.com",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "meraki": {
       "name": "Cisco Meraki (USA)",
       "status": "operational",
       "detail": "All matched regions operational (7 component(s))",
       "status_url": "https://status.meraki.net",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "collaboratemd": {
       "name": "CollaborateMD",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://collaboratemd.statuspage.io",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     },
     "workable": {
       "name": "Workable",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://workable.statuspage.io",
-      "checked_at": "2026-10-12T22:31:26.886925+00:00"
+      "checked_at": "2026-10-13T03:07:41.744263+00:00"
     }
   }
 }
