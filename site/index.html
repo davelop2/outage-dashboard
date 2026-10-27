@@ -73,9 +73,10 @@
     gap:16px;
     padding:16px 20px;
     border-bottom:1px solid var(--line);
+    border-left:7px solid transparent;
   }
   .row:last-child{border-bottom:none;}
-  .row .dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:0 0 9px;}
+  .row .dot{width:16px;height:16px;border-radius:50%;margin-top:2px;flex:0 0 16px;box-shadow:0 0 0 3px rgba(0,0,0,0.05);}
   .row .content{flex:1 1 auto;min-width:0;}
   .dot.ok{background:var(--ok);}
   .dot.degraded{background:var(--degraded);}
@@ -83,16 +84,24 @@
   .dot.manual{background:var(--manual);}
   .dot.unknown{background:#9AA3AF;}
 
-  .name{font-weight:500;font-size:0.98rem;}
+  /* Whole-row color coding — red/yellow/green should be obvious without
+     reading any text, per the "make it noticeable" request. */
+  .row.status-down{background:var(--down-bg);border-left-color:var(--down);}
+  .row.status-degraded{background:var(--degraded-bg);border-left-color:var(--degraded);}
+  .row.status-ok{background:var(--ok-bg);border-left-color:var(--ok);}
+  .row.status-manual{background:var(--manual-bg);border-left-color:var(--manual);}
+  .row.status-unknown{background:#F0F1F3;border-left-color:#9AA3AF;}
+
+  .name{font-weight:600;font-size:0.98rem;}
   .detail{color:var(--muted);font-size:0.85rem;margin-top:3px;line-height:1.4;overflow-wrap:break-word;}
   .row a{color:var(--indigo);text-decoration:none;font-size:0.82rem;font-weight:500;}
   .row a:hover{text-decoration:underline;}
   .checked{flex:0 0 auto;font-family:"IBM Plex Mono",monospace;font-size:0.72rem;color:#9AA3AF;text-align:right;white-space:nowrap;}
 
-  .row-group{cursor:pointer;background:#FAFBFC;}
-  .row-group:hover{background:#F3F5F7;}
+  .row-group{cursor:pointer;}
+  .row-group:hover{filter:brightness(0.97);}
   .row-group .group-count{color:var(--muted);font-weight:400;font-size:0.85rem;}
-  .row-nested{padding-left:40px;background:#FCFCFD;}
+  .row-nested{padding-left:40px;}
   .row-nested .name{font-size:0.9rem;}
 
   .section-label{padding:10px 20px;font-size:0.78rem;color:var(--muted);background:#F7F8FA;border-bottom:1px solid var(--line);}
@@ -187,7 +196,7 @@ function toggleM365(){
 
 function renderRow(s, indent){
   const meta = STATUS_META[s.status] || STATUS_META.unknown;
-  return `<div class="row${indent ? ' row-nested' : ''}">
+  return `<div class="row status-${meta.cls}${indent ? ' row-nested' : ''}">
       <span class="dot ${meta.cls}"></span>
       <div class="content">
         <div class="name">${escapeHtml(s.name)}</div>
@@ -207,7 +216,7 @@ function renderGroup(name, members){
   const countText = summaryOrder.filter(k => counts[k]).map(k => `${counts[k]} ${STATUS_META[k].label.toLowerCase()}`).join(', ');
   const arrow = m365Expanded ? '▾' : '▸';
 
-  const header = `<div class="row row-group" onclick="toggleM365()">
+  const header = `<div class="row row-group status-${meta.cls}" onclick="toggleM365()">
       <span class="dot ${meta.cls}"></span>
       <div class="content">
         <div class="name">${arrow} ${escapeHtml(name)} <span class="group-count">(${members.length} services)</span></div>
