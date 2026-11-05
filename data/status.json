@@ -1,446 +1,446 @@
 {
-  "generated_at": "2026-11-05T02:30:14.812832+00:00",
+  "generated_at": "2026-11-05T02:35:10.560899+00:00",
   "services": {
     "m365_exchange_online": {
       "name": "Microsoft 365 — Exchange Online",
       "status": "degraded",
       "detail": "Users may receive duplicate email messages sent to mailboxes using Exchange Online SMTP forwarding; Exchange Web Services (EWS) applications may be unable to access Exchange Online mailboxes",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226076+00:00"
+      "checked_at": "2026-11-05T02:35:12.103238+00:00"
     },
     "m365_microsoft_entra": {
       "name": "Microsoft 365 — Microsoft Entra",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226092+00:00"
+      "checked_at": "2026-11-05T02:35:12.103257+00:00"
     },
     "m365_microsoft_365_suite": {
       "name": "Microsoft 365 — Microsoft 365 suite",
       "status": "degraded",
       "detail": "Users may have been unable to sign into the OneNote Web Clipper; Admins can't identify who deleted a Viva Engage community or its Microsoft 365 Group in Microsoft Entra ID audit logs; Users may be unable to view contacts and Speed Dial entries in Microsoft Teams, Outlook desktop and mobile",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226098+00:00"
+      "checked_at": "2026-11-05T02:35:12.103261+00:00"
     },
     "m365_sharepoint_online": {
       "name": "Microsoft 365 — SharePoint Online",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226102+00:00"
+      "checked_at": "2026-11-05T02:35:12.103264+00:00"
     },
     "m365_dynamics_365_apps": {
       "name": "Microsoft 365 — Dynamics 365 Apps",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226105+00:00"
+      "checked_at": "2026-11-05T02:35:12.103267+00:00"
     },
     "m365_basic_mobility_and_security": {
       "name": "Microsoft 365 — Basic Mobility and Security",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226108+00:00"
+      "checked_at": "2026-11-05T02:35:12.103270+00:00"
     },
     "m365_planner": {
       "name": "Microsoft 365 — Planner",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226112+00:00"
+      "checked_at": "2026-11-05T02:35:12.103272+00:00"
     },
     "m365_sway": {
       "name": "Microsoft 365 — Sway",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226115+00:00"
+      "checked_at": "2026-11-05T02:35:12.103274+00:00"
     },
     "m365_power_bi": {
       "name": "Microsoft 365 — Power BI",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226118+00:00"
+      "checked_at": "2026-11-05T02:35:12.103279+00:00"
     },
     "m365_microsoft_intune": {
       "name": "Microsoft 365 — Microsoft Intune",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226120+00:00"
+      "checked_at": "2026-11-05T02:35:12.103282+00:00"
     },
     "m365_microsoft_onedrive": {
       "name": "Microsoft 365 — Microsoft OneDrive",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226123+00:00"
+      "checked_at": "2026-11-05T02:35:12.103284+00:00"
     },
     "m365_microsoft_teams": {
       "name": "Microsoft 365 — Microsoft Teams",
       "status": "degraded",
       "detail": "Users' Microsoft Teams contact cards may not fully display Out of office text",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226127+00:00"
+      "checked_at": "2026-11-05T02:35:12.103287+00:00"
     },
     "m365_microsoft_bookings": {
       "name": "Microsoft 365 — Microsoft Bookings",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226130+00:00"
+      "checked_at": "2026-11-05T02:35:12.103289+00:00"
     },
     "m365_microsoft_365_for_the_web": {
       "name": "Microsoft 365 — Microsoft 365 for the web",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226133+00:00"
+      "checked_at": "2026-11-05T02:35:12.103292+00:00"
     },
     "m365_microsoft_365_apps": {
       "name": "Microsoft 365 — Microsoft 365 apps",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226135+00:00"
+      "checked_at": "2026-11-05T02:35:12.103294+00:00"
     },
     "m365_power_apps": {
       "name": "Microsoft 365 — Power Apps",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226138+00:00"
+      "checked_at": "2026-11-05T02:35:12.103296+00:00"
     },
     "m365_power_apps_in_microsoft_365": {
       "name": "Microsoft 365 — Power Apps in Microsoft 365",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226141+00:00"
+      "checked_at": "2026-11-05T02:35:12.103298+00:00"
     },
     "m365_microsoft_power_automate": {
       "name": "Microsoft 365 — Microsoft Power Automate",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226144+00:00"
+      "checked_at": "2026-11-05T02:35:12.103300+00:00"
     },
     "m365_microsoft_power_automate_in_microsoft_365": {
       "name": "Microsoft 365 — Microsoft Power Automate in Microsoft 365",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226147+00:00"
+      "checked_at": "2026-11-05T02:35:12.103303+00:00"
     },
     "m365_microsoft_forms": {
       "name": "Microsoft 365 — Microsoft Forms",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226150+00:00"
+      "checked_at": "2026-11-05T02:35:12.103305+00:00"
     },
     "m365_microsoft_defender_xdr": {
       "name": "Microsoft 365 — Microsoft Defender XDR",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226153+00:00"
+      "checked_at": "2026-11-05T02:35:12.103307+00:00"
     },
     "m365_project_for_the_web": {
       "name": "Microsoft 365 — Project for the web",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226155+00:00"
+      "checked_at": "2026-11-05T02:35:12.103309+00:00"
     },
     "m365_microsoft_stream": {
       "name": "Microsoft 365 — Microsoft Stream",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226158+00:00"
+      "checked_at": "2026-11-05T02:35:12.103311+00:00"
     },
     "m365_universal_print": {
       "name": "Microsoft 365 — Universal Print",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226161+00:00"
+      "checked_at": "2026-11-05T02:35:12.103313+00:00"
     },
     "m365_microsoft_viva": {
       "name": "Microsoft 365 — Microsoft Viva",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226164+00:00"
+      "checked_at": "2026-11-05T02:35:12.103315+00:00"
     },
     "m365_windows_autopatch": {
       "name": "Microsoft 365 — Windows Autopatch",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226170+00:00"
+      "checked_at": "2026-11-05T02:35:12.103317+00:00"
     },
     "m365_microsoft_dataverse": {
       "name": "Microsoft 365 — Microsoft Dataverse",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226176+00:00"
+      "checked_at": "2026-11-05T02:35:12.103321+00:00"
     },
     "m365_power_platform": {
       "name": "Microsoft 365 — Power Platform",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226180+00:00"
+      "checked_at": "2026-11-05T02:35:12.103325+00:00"
     },
     "m365_microsoft_copilot_(microsoft_365)": {
       "name": "Microsoft 365 — Microsoft Copilot (Microsoft 365)",
       "status": "degraded",
       "detail": "Users' Microsoft 365 Copilot Analyst and Researcher agents may open a new chat window instead of the agents; Users may see an erroneous error when sharing agents with new owners in Microsoft Copilot Agent Builder",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226184+00:00"
+      "checked_at": "2026-11-05T02:35:12.103328+00:00"
     },
     "m365_microsoft_purview": {
       "name": "Microsoft 365 — Microsoft Purview",
       "status": "degraded",
       "detail": "Admins may encounter delays in accessing audit log data results in Microsoft Purview Audit",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226186+00:00"
+      "checked_at": "2026-11-05T02:35:12.103330+00:00"
     },
     "m365_microsoft_clipchamp_": {
       "name": "Microsoft 365 — Microsoft Clipchamp ",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226189+00:00"
+      "checked_at": "2026-11-05T02:35:12.103332+00:00"
     },
     "m365_microsoft_365_copilot_chat": {
       "name": "Microsoft 365 — Microsoft 365 Copilot Chat",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226192+00:00"
+      "checked_at": "2026-11-05T02:35:12.103336+00:00"
     },
     "m365_microsoft_copilot_(power_platform)": {
       "name": "Microsoft 365 — Microsoft Copilot (Power Platform)",
       "status": "operational",
       "detail": "Graph status: serviceOperational",
       "status_url": "https://admin.microsoft.com/adminportal/home#/servicehealth",
-      "checked_at": "2026-11-05T02:30:16.226194+00:00"
+      "checked_at": "2026-11-05T02:35:12.103338+00:00"
     },
     "adobe": {
       "name": "Adobe (Creative Cloud & Document Cloud)",
       "status": "operational",
       "detail": "No open incidents reported",
       "status_url": "https://status.adobe.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "asana": {
       "name": "Asana",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.asana.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "frameio": {
       "name": "Frame.io",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.frame.io",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "jira_atlassian": {
       "name": "Jira / Atlassian",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.atlassian.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "docusign": {
       "name": "DocuSign",
       "status": "manual",
       "detail": "No stable public API available. Check manually via the link.",
       "status_url": "https://status.docusign.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "salesforce_aba": {
       "name": "Salesforce — ABA Centers (USA470)",
       "status": "operational",
       "detail": "Available",
       "status_url": "https://status.salesforce.com/instances/USA470",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "salesforce_marquis": {
       "name": "Salesforce — Marquis MD (USA374)",
       "status": "operational",
       "detail": "Available",
       "status_url": "https://status.salesforce.com/instances/USA374",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "servicenow": {
       "name": "ServiceNow",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://servicenow.statuspage.io",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "tableau": {
       "name": "Tableau Cloud",
       "status": "operational",
       "detail": "Available",
       "status_url": "https://status.salesforce.com/products/Tableau",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "zoom": {
       "name": "Zoom",
       "status": "unknown",
       "detail": "Service Under Maintenance",
       "status_url": "https://status.zoom.us",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "apple_business_manager": {
       "name": "Apple Business Manager",
       "status": "operational",
       "detail": "Apple Business: no current issues reported",
       "status_url": "https://www.apple.com/support/systemstatus/",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "calltrackingmetrics": {
       "name": "Call Tracking Metrics",
       "status": "manual",
       "detail": "Their status page blocks automated requests from cloud/datacenter IPs (Cloudflare-style bot protection) — confirmed after multiple approaches. Check manually via the link.",
       "status_url": "https://status.calltrackingmetrics.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "checkpoint": {
       "name": "Check Point (USA)",
       "status": "operational",
       "detail": "All matched regions operational (55 component(s))",
       "status_url": "https://status.checkpoint.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "dashlane": {
       "name": "Dashlane",
       "status": "manual",
       "detail": "Their status page (Status.io) embeds data directly in the page rather than a discoverable public API endpoint. Check manually via the link.",
       "status_url": "https://status.dashlane.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "databricks": {
       "name": "Databricks (USA)",
       "status": "operational",
       "detail": "All matched regions operational",
       "status_url": "https://status.azuredatabricks.net",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "godaddy": {
       "name": "GoDaddy",
       "status": "degraded",
       "detail": "Voice & Messaging Support Services Degraded — We are currently investigating an Impacting Voice & Messaging Support Services in all regions.",
       "status_url": "https://status.godaddy.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "ensora": {
       "name": "Ensora",
       "status": "manual",
       "detail": "Hosted on a community platform (not a standard status API). Check manually via the link.",
       "status_url": "https://experience.ensorahealth.com/p/status-eh",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "foxit": {
       "name": "Foxit",
       "status": "manual",
       "detail": "No stable public API found. Check manually via the link.",
       "status_url": "https://status.foxit.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "github": {
       "name": "GitHub",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://www.githubstatus.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "snowflake": {
       "name": "Snowflake (USA)",
       "status": "degraded",
       "detail": "Virtual Warehouses: degraded_performance; GCP - US Central 1 (Iowa): degraded_performance",
       "status_url": "https://status.snowflake.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "smartsheet": {
       "name": "Smartsheet",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.smartsheet.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "workato": {
       "name": "Workato",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.workato.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "teamviewer": {
       "name": "TeamViewer",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.teamviewer.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "sentinelone": {
       "name": "SentinelOne",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.sentinelone.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "rubrik": {
       "name": "Rubrik",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.rubrik.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "knowbe4": {
       "name": "KnowBe4",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.knowbe4.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "claude": {
       "name": "Claude (Anthropic)",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://status.anthropic.com",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "meraki": {
       "name": "Cisco Meraki (USA)",
       "status": "operational",
       "detail": "All matched regions operational (7 component(s))",
       "status_url": "https://status.meraki.net",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "collaboratemd": {
       "name": "CollaborateMD",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://collaboratemd.statuspage.io",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     },
     "workable": {
       "name": "Workable",
       "status": "operational",
       "detail": "All Systems Operational",
       "status_url": "https://workable.statuspage.io",
-      "checked_at": "2026-11-05T02:30:14.812832+00:00"
+      "checked_at": "2026-11-05T02:35:10.560899+00:00"
     }
   }
 }
